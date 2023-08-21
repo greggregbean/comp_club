@@ -6,8 +6,9 @@ set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable ( run    src/main.cpp
-                        include/comp_club.hpp
                         src/comp_club.cpp
+                        include/comp_club.hpp
+                        include/input_check.hpp
 )
 
 if (MSVC)
