@@ -71,15 +71,14 @@ namespace comp_club {
         std::string cl_name;
         i_file >> cl_name;
 
-        if (!working(e_time)) {
-            std::cout << e_time << " " << static_cast<short>(i_event::cl_enter) 
+        std::cout << e_time << " " << static_cast<short>(i_event::cl_enter) 
                       << " " << cl_name << std::endl;
+
+        if (!working(e_time)) {
             print_error(e_time, errors::NotOpenYet);
         }
         
         else if (in_the_club(cl_name)) {
-            std::cout << e_time << " " << static_cast<short>(i_event::cl_enter) 
-                      << " " << cl_name << std::endl;
             print_error(e_time, errors::YouShallNotPass);
         }
 
@@ -87,7 +86,7 @@ namespace comp_club {
             queue.push_back(cl_name);
         }
 
-        dump();
+        //dump();
     }
 
     void comp_club_data::handle_event (std::ifstream& i_file, i_event event_id, const std::string& e_time) {
