@@ -2,17 +2,6 @@
 
 namespace comp_club {
 
-    size_t time_to_minutes (const std::string& time) {
-        size_t minutes = 0;
-
-        minutes += (time[0] - '0') * 600;
-        minutes += (time[1] - '0') * 60;
-        minutes += (time[3] - '0') * 10;
-        minutes += (time[4] - '0');
-
-        return minutes;
-    }
-
     //------------------
     // Table
     //------------------

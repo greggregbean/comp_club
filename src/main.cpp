@@ -1,5 +1,4 @@
 #include "../include/comp_club.hpp"
-#include "../include/input_check.hpp"
 
 int main (int argc, char* argv []) {
     if (argc == 1) {
@@ -12,7 +11,7 @@ int main (int argc, char* argv []) {
         i_file.open(argv[1], std::ios::in);
         
         // Firstly check correctness of data
-        if (input_check (i_file) == input::incorrect) {
+        if (!ic::input_check(i_file)) {
             return -1;
         }
 
@@ -27,8 +26,8 @@ int main (int argc, char* argv []) {
         i_file >> closing;
         i_file >> cost_per_hour;
 
-        comp_club::comp_club_data day_data (num_of_tables, opening, closing, cost_per_hour);
-        day_data.dump();
+        // comp_club::comp_club_data day_data (num_of_tables, opening, closing, cost_per_hour);
+        // day_data.dump();
 
         //day_data.event_handler(i_file);
 

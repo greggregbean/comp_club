@@ -1,16 +1,16 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <map>
+
+#include "input_check.hpp"
 
 namespace comp_club {
 
 enum class i_event {
     cl_enter      = 1,
     cl_take_table = 2,
-    cl_is_waiting = 3
+    cl_is_waiting = 3,
+    cl_quit       = 4
 };
 
 enum class o_event {
@@ -26,8 +26,6 @@ enum class errors {
     NotOpenYet, 
     YouShallNotPass
 };
-
-size_t time_to_minutes (const std::string& time);
 
 class table {
     private:
@@ -66,8 +64,5 @@ class comp_club_data {
         void event_handler (const std::ifstream& i_file); 
 
 };
-
-
-
 
 }
