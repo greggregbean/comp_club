@@ -37,5 +37,7 @@ int main (int argc, char* argv []) {
 
         std::cout << closing << std::endl;
 
+        day_data.dump();
+
     }
 }
