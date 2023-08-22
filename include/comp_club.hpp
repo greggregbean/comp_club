@@ -1,8 +1,9 @@
 #pragma once
 
 #include <map>
+#include <vector>
 
-#include "input_check.hpp"
+#include "./input_check.hpp"
 
 namespace comp_club {
 
@@ -30,14 +31,15 @@ enum class errors {
 class table {
     private:
         bool active = false;
-        std::string client;
+        std::string cl_name;
         std::size_t start_time; 
         std::size_t end_time;
         size_t total_time = 0;
 
     public:
-        table () {}
         void dump ();
+        const std::string& get_cl_name() { return cl_name; }
+
 };
 
 class comp_club_data {
@@ -51,18 +53,30 @@ class comp_club_data {
         size_t closing_m = 0;
 
         size_t cost_per_hour;
-        std::map <int, table> room;
+
+        std::map    <int, table>  room;
+        std::vector <std::string> queue;
 
     public:
         comp_club_data (const size_t& i_num_of_tables, 
                         const std::string&  i_opening, 
                         const std::string&  i_closing,  
                         const size_t& i_cost_per_hour);
-
         void dump ();
-        bool time_correct (const std::string& time);
-        void event_handler (const std::ifstream& i_file); 
+
+        // All for handle events:
+        bool working     (const std::string& time);
+        bool in_the_club (const std::string& cl_name);
+        void handle_cl_enter      (std::ifstream& i_file, const std::string& e_time);
+        void handle_cl_take_table (std::ifstream& i_file, const std::string& e_time);
+        void handle_cl_is_waiting (std::ifstream& i_file, const std::string& e_time);
+        void handle_cl_quit       (std::ifstream& i_file, const std::string& e_time);
+        void handle_event  (std::ifstream& i_file, i_event event_id, const std::string& e_time);
+        void event_handler (std::ifstream& i_file); 
 
 };
+
+void print_error(const std::string& time, errors erorr_id);
+
 
 }

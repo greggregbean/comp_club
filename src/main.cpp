@@ -20,16 +20,22 @@ int main (int argc, char* argv []) {
         std::string closing;
         size_t cost_per_hour;
 
-        
+        i_file.seekg(0);
+
         i_file >> num_of_tables;
         i_file >> opening;
         i_file >> closing;
         i_file >> cost_per_hour;
 
-        // comp_club::comp_club_data day_data (num_of_tables, opening, closing, cost_per_hour);
-        // day_data.dump();
+        comp_club::comp_club_data day_data (num_of_tables, opening, closing, cost_per_hour);
+        day_data.dump();
 
-        //day_data.event_handler(i_file);
+        std::cout << " ---- COUT --- " << std::endl
+                  << opening << std::endl;
+
+        day_data.event_handler(i_file);
+
+        std::cout << closing << std::endl;
 
     }
 }

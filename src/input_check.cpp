@@ -33,6 +33,7 @@ bool cl_name_correct (const std::string& cl_name) {
            && !cl_name.empty();
 }
 
+// --- Check if cl_take_table event body is correct ---
 bool cl_tt_body_correct (const std::string& cl_tt_body, const size_t& num_of_tables) {
     if (cl_tt_body.empty()) return false;
 
@@ -59,7 +60,7 @@ bool cl_tt_body_correct (const std::string& cl_tt_body, const size_t& num_of_tab
 bool event_correct (const char* event_line, std::string & last_e_time, const size_t& num_of_tables) {
     // --- Check if time of event is correct
     std::string e_time {event_line, 5};
-
+    
     if (!time_correct(e_time) || time_to_minutes(e_time) < time_to_minutes(last_e_time)) 
         return false;
     
@@ -98,9 +99,9 @@ bool input_check (std::ifstream& i_file) {
         return false;
 
     // --- Check if num_of_tables is correct ---
-    char line_buf[1000];
+    char line_buf[line_len];
 
-    i_file.getline(line_buf, 1000);
+    i_file.getline(line_buf, line_len);
     std::string num {line_buf};
 
     if (!num_correct(num)) {
@@ -111,7 +112,7 @@ bool input_check (std::ifstream& i_file) {
     size_t num_of_tables = std::stoull(num); // will be neccesary in checking cl_take_table events 
 
     // --- Check if opening and closing times are correct ---
-    i_file.getline(line_buf, 1000);
+    i_file.getline(line_buf, line_len);
     std::string opening {line_buf, 5};
     std::string closing {line_buf + 6}; // 5 symbols of time XX:XX and one space symbol
 
@@ -122,7 +123,7 @@ bool input_check (std::ifstream& i_file) {
     }
 
     // --- Check if cost_per_hour is correct ---
-    i_file.getline(line_buf, 1000);
+    i_file.getline(line_buf, line_len);
 
     if (!num_correct(line_buf)) {
         std::cout << line_buf << std::endl;
@@ -130,7 +131,7 @@ bool input_check (std::ifstream& i_file) {
     }
 
     // --- Check if events are correct ---
-    i_file.getline(line_buf, 1000);
+    i_file.getline(line_buf, line_len);
     std::string last_e_time {line_buf, 5};
 
     while (!i_file.eof()) {
@@ -138,7 +139,7 @@ bool input_check (std::ifstream& i_file) {
             std::cout << line_buf << std::endl;
             return false;
         }
-        i_file.getline(line_buf, 1000);
+        i_file.getline(line_buf, line_len);
     }
 
     return true;
