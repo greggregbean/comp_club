@@ -81,6 +81,8 @@ class comp_club_data {
                         cost_per_hour (i_cost_per_hour) {}
         void dump ();
         void event_handler (std::ifstream& i_file); 
+        void end_day();
+        void show_day_data();
 
     private:
         // All for monitoring and changing comp_club_data
@@ -103,6 +105,8 @@ class comp_club_data {
         void generate_cl_quit       (const std::string& e_time, const std::string& cl_name);
         void generate_cl_take_table (const std::string& e_time, const std::string& cl_name, size_t table);
         
+        // Other:
+        void print_time_from_minutes(size_t time_m);
 };
 
 }

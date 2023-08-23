@@ -18,6 +18,7 @@ bool num_correct (const std::string& num_s) {
 }
 
 bool time_correct (const std::string& time) {
+    if (time.empty())                    return false;
     if (time[0] >  '2' || time[0] < '0') return false;
     if (time[1] >  '9' || time[1] < '0') return false;
     if (time[2] != ':')                  return false;
@@ -141,6 +142,12 @@ bool input_check (std::ifstream& i_file) {
         }
         i_file.getline(line_buf, line_len);
     }
+
+    // --- Check of the last line ---
+    if (!event_correct(line_buf, last_e_time, num_of_tables)) {
+            std::cout << line_buf << std::endl;
+            return false;
+        }
 
     return true;
 }

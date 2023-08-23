@@ -40,11 +40,52 @@ namespace comp_club {
 
         std::cout << std::endl << "Queue: ";
 
-        for (size_t i = 0; i < queue.size(); ++i) {
-            std::cout << "\t\"" << queue[i] << "\"" << std::endl;
+        for (auto& cl_name : queue) {
+            std::cout << "\t\"" << cl_name << "\"" << std::endl;
         }
 
         std::cout << std::endl << "-----------------------------------------------" << std::endl;
+    }
+
+    void comp_club_data::event_handler (std::ifstream& i_file) {
+        std::string event_time;
+        short       event_id;
+        
+        i_file >> event_time;
+        i_file >> event_id;
+
+        while (!i_file.eof()) {          
+            handle_event(i_file, static_cast<i_event> (event_id), event_time);
+            i_file >> event_time;
+            i_file >> event_id;
+        }
+    }
+
+    void comp_club_data::end_day() {
+        std::set <std::string> quit_clients;
+
+        if (!queue.empty()) {
+            quit_clients.insert(queue.begin(), queue.end());
+            queue.clear();
+        }
+
+        for (size_t i = 1; i <= num_of_tables; ++i) {
+            if (room[i].active) {
+                quit_clients.insert(room[i].cl_name);
+                end_session(i, closing);
+            }
+        }
+
+        for (auto& cl_name : quit_clients) {
+            generate_cl_quit(closing, cl_name);
+        }
+    }
+
+    void comp_club_data::show_day_data() {
+        for (size_t i = 1; i <= num_of_tables; ++i) {
+            std::cout << i << " " << room[i].total_sum << " ";
+            print_time_from_minutes(room[i].total_time); 
+        }
     }
 
     //------------------------------------------------
@@ -166,7 +207,25 @@ namespace comp_club {
     }
 
     void comp_club_data::handle_cl_quit (std::ifstream& i_file, const std::string& e_time) {
-        
+        std::string cl_name;
+        i_file >> cl_name;
+
+        std::cout << e_time << " " << static_cast<short>(i_event::cl_quit) 
+                << " " << cl_name << std::endl;
+
+        pos prev_pos = in_da_club(cl_name);
+
+        if (prev_pos.sp == spot::nowhere) {
+            generate_error(e_time, errors::ClientUnknown);
+        }
+
+        else if (prev_pos.sp == spot::room) {
+            end_session(prev_pos.num, e_time);
+            if (!queue.empty()) {
+                generate_cl_take_table(e_time, queue[0], prev_pos.num);
+                place_client(e_time, queue[0], prev_pos.num, {spot::queue, 0});
+            }
+        }
     }
 
     void comp_club_data::handle_event (std::ifstream& i_file, i_event event_id, const std::string& e_time) {
@@ -181,29 +240,25 @@ namespace comp_club {
                 handle_cl_is_waiting(i_file, e_time);
                 break;
             case i_event::cl_quit:
-                i_file.ignore(line_len, '\n');
-                //handle_cl_quit(i_file, e_time);
+                handle_cl_quit(i_file, e_time);
                 break;
-        }
-    }
-
-    void comp_club_data::event_handler (std::ifstream& i_file) {
-        std::string event_time;
-        short       event_id;
-        
-        i_file >> event_time;
-        i_file >> event_id;
-
-        while (!i_file.eof()) {          
-            handle_event(i_file, static_cast<i_event> (event_id), event_time);
-            i_file >> event_time;
-            i_file >> event_id;
         }
     }
 
     //-----------------------------
     // All for generating o_events
     //-----------------------------
+    void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
+        std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
+    }
+
+    void comp_club_data::generate_cl_take_table (const std::string& e_time, 
+                                                 const std::string& cl_name,
+                                                 size_t table) {
+        std::cout << e_time << " " << static_cast<short> (o_event::cl_take_table) 
+                        << " " << cl_name << " " << table << std::endl;  
+    }
+
     void comp_club_data::generate_error(const std::string& e_time, errors error_id) {
         std::cout << e_time << " " << static_cast<short> (o_event::error) << " ";
         switch (error_id) {
@@ -225,14 +280,14 @@ namespace comp_club {
         }
     }
 
-    void comp_club_data::generate_cl_take_table (const std::string& e_time, 
-                                                 const std::string& cl_name,
-                                                 size_t table) {
+    //-------
+    // Other
+    //-------
+    void comp_club_data::print_time_from_minutes(size_t time_m) {
+        size_t hours   = time_m / 60;
+        size_t minutes = time_m % 60;
 
-    }
-
-    void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
-        std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
+        std::cout << hours / 10 << hours % 10 << ":" << minutes / 10 << minutes % 10 << std::endl;
     }
 
 }
