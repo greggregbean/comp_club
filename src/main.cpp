@@ -28,9 +28,8 @@ int main (int argc, char* argv []) {
         i_file >> cost_per_hour;
 
         comp_club::comp_club_data day_data (num_of_tables, opening, closing, cost_per_hour);
-        day_data.dump();
 
-        std::cout << " ---- COUT --- " << std::endl
+        std::cout << "============ COUT ============" << std::endl
                   << opening << std::endl;
 
         day_data.event_handler(i_file);

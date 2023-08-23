@@ -2,15 +2,21 @@
 
 #include <map>
 #include <vector>
-#include <set>
 
 #include "./input_check.hpp"
 
 namespace comp_club {
 
+enum class spot {
+    hall    = 'h',
+    queue   = 'q',
+    room    = 'r',
+    nowhere = '-'
+};
+
 struct pos {
-    char q_or_r; // determines if a client in queue or in room
-    size_t num;  // determines client's number of table or position in queue
+    spot    sp; // determines if a client in hall, queue or room
+    size_t num; // determines client's number of table or position in queue
 };
 
 enum class i_event {
@@ -57,9 +63,9 @@ class comp_club_data {
 
     size_t cost_per_hour;
 
-    std::map    <size_t, table> room;
+    std::vector <std::string>   hall;
     std::vector <std::string>   queue;
-
+    std::map    <size_t, table> room;
 
     public:
         comp_club_data (const size_t& i_num_of_tables, 
