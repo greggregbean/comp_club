@@ -61,8 +61,8 @@ namespace comp_club {
         room[table].total_sum += ((session_time_m / 60) + (session_time_m % 60 > 0)) * cost_per_hour;
     }
 
-    bool comp_club_data::working (const std::string& time) {
-        size_t time_m = time_to_minutes(time);
+    bool comp_club_data::working (const std::string& e_time) {
+        size_t time_m = time_to_minutes(e_time);
         return time_m >= opening_m && time_m <= closing_m;
     }
 
@@ -136,8 +136,6 @@ namespace comp_club {
         else {
             hall.push_back(cl_name);
         }
-
-        dump();
     }
 
     void comp_club_data::handle_cl_take_table (std::ifstream& i_file, const std::string& e_time) {
@@ -163,8 +161,6 @@ namespace comp_club {
         else {
             place_client(e_time, cl_name, table_num, prev_pos);
         }
-
-        dump();
     }
 
     void comp_club_data::handle_cl_is_waiting (std::ifstream& i_file, const std::string& e_time) {
@@ -191,13 +187,29 @@ namespace comp_club {
             rm_pos += in_da_club(cl_name).num;
             hall.erase(rm_pos);
         }
-
-        dump();
     }
 
-    // void comp_club_data::handle_cl_quit (std::ifstream& i_file, const std::string& e_time) {
+    void comp_club_data::handle_cl_quit (std::ifstream& i_file, const std::string& e_time) {
+        std::string cl_name;
+        i_file >> cl_name;
 
-    // }
+        std::cout << e_time << " " << static_cast<short>(i_event::cl_quit) 
+                << " " << cl_name << std::endl;
+
+        pos prev_pos = in_da_club(cl_name);
+
+        if (prev_pos.sp == spot::nowhere) {
+            generate_error(e_time, errors::ClientUnknown);
+        }
+
+        else if (prev_pos.sp == spot::room) {
+            end_session(prev_pos.num, e_time);
+            if (!queue.empty()) {
+                generate_cl_take_table(e_time, queue[0], prev_pos.num);
+                place_client(e_time, queue[0], prev_pos.num, {spot::queue, 0});
+            }
+        }
+    }
 
     void comp_club_data::handle_event (std::ifstream& i_file, i_event event_id, const std::string& e_time) {
         switch (event_id) {
@@ -226,6 +238,7 @@ namespace comp_club {
 
         while (!i_file.eof()) {          
             handle_event(i_file, static_cast<i_event> (event_id), event_time);
+            dump();
             i_file >> event_time;
             i_file >> event_id;
         }
@@ -234,8 +247,8 @@ namespace comp_club {
     //-----------------------------
     // All for generating o_events
     //-----------------------------
-    void comp_club_data::generate_error(const std::string& time, errors error_id) {
-        std::cout << time << " " << static_cast<short> (o_event::error) << " ";
+    void comp_club_data::generate_error(const std::string& e_time, errors error_id) {
+        std::cout << e_time << " " << static_cast<short> (o_event::error) << " ";
         switch (error_id) {
             case errors::ClientUnknown:
                 std::cout << "ClientUnknown" << std::endl;
@@ -255,14 +268,15 @@ namespace comp_club {
         }
     }
 
-    // void comp_club_data::generate_cl_take_table (const std::string& time, 
-    //                                              const std::string& cl_name,
-    //                                              size_t table) {
+    void comp_club_data::generate_cl_take_table (const std::string& e_time, 
+                                                 const std::string& cl_name,
+                                                 size_t table) {
+        std::cout << e_time << " " << static_cast<short> (o_event::cl_take_table) 
+                  << " " << cl_name << " " << table << std::endl;                                       
+    }
 
-    // }
-
-    void comp_club_data::generate_cl_quit (const std::string& time, const std::string& cl_name) {
-        std::cout << time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
+    void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
+        std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
     }
 
 }
