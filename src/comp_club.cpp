@@ -1,6 +1,5 @@
 #include "../include/comp_club.hpp"
 
-
 namespace comp_club {
 
 //-------------
@@ -51,7 +50,6 @@ namespace comp_club {
     //------------------------------------------------
     // All for monitoring and changing comp_club_data
     //------------------------------------------------
-
     void comp_club_data::end_session (size_t table, const std::string end_time) {
         size_t session_time_m = room[table].end_session(end_time);
         room[table].total_sum += ((session_time_m / 60) + (session_time_m % 60 > 0)) * cost_per_hour;
@@ -93,10 +91,16 @@ namespace comp_club {
         }
     }
 
-    //-------------------------
-    // All for handling events
-    //-------------------------
+    size_t comp_club_data::free_table () {
+        for (size_t i = 1; i <= num_of_tables; ++i) {
+            if (!room[i].active) return i;
+        }
+        return 0;
+    }
 
+    //---------------------------
+    // All for handling i_events
+    //---------------------------
     void comp_club_data::handle_cl_enter (std::ifstream& i_file, const std::string& e_time) {
         std::string cl_name;
         i_file >> cl_name;
@@ -105,11 +109,11 @@ namespace comp_club {
                   << " " << cl_name << std::endl;
 
         if (!working(e_time)) {
-            print_error(e_time, errors::NotOpenYet);
+            generate_error(e_time, errors::NotOpenYet);
         }
         
         else if (in_da_club(cl_name).q_or_r != '-') {
-            print_error(e_time, errors::YouShallNotPass);
+            generate_error(e_time, errors::YouShallNotPass);
         }
 
         else {
@@ -130,22 +134,42 @@ namespace comp_club {
         pos prev_pos = in_da_club(cl_name);
 
         if (prev_pos.q_or_r == '-') {
-            print_error(e_time, errors::ClientUnknown);
+            generate_error(e_time, errors::ClientUnknown);
         }
 
         else if (room[table_num].active) {
-            print_error(e_time, errors::PlaceIsBusy);
+            generate_error(e_time, errors::PlaceIsBusy);
         }
 
         else {
             place_client(e_time, cl_name, table_num, prev_pos);
         }
+    }
 
-        dump();
+    void comp_club_data::handle_cl_is_waiting (std::ifstream& i_file, const std::string& e_time) {
+        std::string cl_name;
+        i_file >> cl_name;
+
+        std::cout << e_time << " " << static_cast<short>(i_event::cl_is_waiting) 
+                  << " " << cl_name << std::endl;
+        
+        if (free_table()) {
+            generate_error(e_time, errors::ICanWaitNoLonger);
+        }
+
+        if (queue.size() > num_of_tables) {
+            generate_cl_quit(e_time, cl_name);
+            auto rm_pos = queue.begin();
+            rm_pos += in_da_club(cl_name).num;
+            queue.erase(rm_pos);
+        }
+    }
+
+    void comp_club_data::handle_cl_quit (std::ifstream& i_file, const std::string& e_time) {
+
     }
 
     void comp_club_data::handle_event (std::ifstream& i_file, i_event event_id, const std::string& e_time) {
-
         switch (event_id) {
             case i_event::cl_enter:
                 handle_cl_enter(i_file, e_time);
@@ -154,8 +178,7 @@ namespace comp_club {
                 handle_cl_take_table(i_file, e_time);
                 break;
             case i_event::cl_is_waiting:
-                i_file.ignore(line_len, '\n');
-                //handle_cl_is_waiting(i_file, e_time);
+                handle_cl_is_waiting(i_file, e_time);
                 break;
             case i_event::cl_quit:
                 i_file.ignore(line_len, '\n');
@@ -178,8 +201,11 @@ namespace comp_club {
         }
     }
 
-    void print_error(const std::string& time, errors error_id) {
-        std::cout << time << " 13 ";
+    //-----------------------------
+    // All for generating o_events
+    //-----------------------------
+    void comp_club_data::generate_error(const std::string& time, errors error_id) {
+        std::cout << time << " " << static_cast<short> (o_event::error) << " ";
         switch (error_id) {
             case errors::ClientUnknown:
                 std::cout << "ClientUnknown" << std::endl;
@@ -197,6 +223,16 @@ namespace comp_club {
                 std::cout << "YouShallNotPass" << std::endl;
                 break;
         }
+    }
+
+    void comp_club_data::generate_cl_take_table (const std::string& time, 
+                                                 const std::string& cl_name,
+                                                 size_t table) {
+
+    }
+
+    void comp_club_data::generate_cl_quit (const std::string& time, const std::string& cl_name) {
+        std::cout << time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
     }
 
 }
