@@ -55,23 +55,23 @@ namespace comp_club {
         room[table].total_sum += ((session_time_m / 60) + (session_time_m % 60 > 0)) * cost_per_hour;
     }
 
-    bool comp_club_data::working (const std::string& time) {
-        size_t time_m = time_to_minutes(time);
+    bool comp_club_data::working (const std::string& e_time) {
+        size_t time_m = time_to_minutes(e_time);
         return time_m >= opening_m && time_m <= closing_m;
     }
 
     pos comp_club_data::in_da_club (const std::string& cl_name) {
         // Looking in queue
         for (size_t i = 0; i < queue.size(); ++i) {
-            if (!queue[i].compare(cl_name)) return {'q', i};
+            if (!queue[i].compare(cl_name)) return {spot::queue, i};
         }
 
         // Looking in room
         for (size_t i = 1; i <= num_of_tables; ++i) {
-            if (!room[i].cl_name.compare(cl_name)) return {'r', i};
+            if (!room[i].cl_name.compare(cl_name)) return {spot::room, i};
         }
 
-        return {'-', 0};
+        return {spot::nowhere, 0};
     }
 
     void comp_club_data::place_client (const std::string& start_time, const std::string& name, 
@@ -80,7 +80,7 @@ namespace comp_club {
         room[table].cl_name      = name;
         room[table].start_time_m = time_to_minutes(start_time);
 
-        if (prev_pos.q_or_r == 'q') {
+        if (prev_pos.sp == spot::queue) {
             auto rm_pos = queue.begin();
             rm_pos += prev_pos.num;
             queue.erase(rm_pos);
@@ -112,7 +112,7 @@ namespace comp_club {
             generate_error(e_time, errors::NotOpenYet);
         }
         
-        else if (in_da_club(cl_name).q_or_r != '-') {
+        else if (in_da_club(cl_name).sp != spot::nowhere) {
             generate_error(e_time, errors::YouShallNotPass);
         }
 
@@ -133,7 +133,7 @@ namespace comp_club {
 
         pos prev_pos = in_da_club(cl_name);
 
-        if (prev_pos.q_or_r == '-') {
+        if (prev_pos.sp == spot::nowhere) {
             generate_error(e_time, errors::ClientUnknown);
         }
 
@@ -157,7 +157,7 @@ namespace comp_club {
             generate_error(e_time, errors::ICanWaitNoLonger);
         }
 
-        if (queue.size() > num_of_tables) {
+        else if (queue.size() > num_of_tables) {
             generate_cl_quit(e_time, cl_name);
             auto rm_pos = queue.begin();
             rm_pos += in_da_club(cl_name).num;
@@ -166,7 +166,7 @@ namespace comp_club {
     }
 
     void comp_club_data::handle_cl_quit (std::ifstream& i_file, const std::string& e_time) {
-
+        
     }
 
     void comp_club_data::handle_event (std::ifstream& i_file, i_event event_id, const std::string& e_time) {
@@ -204,8 +204,8 @@ namespace comp_club {
     //-----------------------------
     // All for generating o_events
     //-----------------------------
-    void comp_club_data::generate_error(const std::string& time, errors error_id) {
-        std::cout << time << " " << static_cast<short> (o_event::error) << " ";
+    void comp_club_data::generate_error(const std::string& e_time, errors error_id) {
+        std::cout << e_time << " " << static_cast<short> (o_event::error) << " ";
         switch (error_id) {
             case errors::ClientUnknown:
                 std::cout << "ClientUnknown" << std::endl;
@@ -225,14 +225,14 @@ namespace comp_club {
         }
     }
 
-    void comp_club_data::generate_cl_take_table (const std::string& time, 
+    void comp_club_data::generate_cl_take_table (const std::string& e_time, 
                                                  const std::string& cl_name,
                                                  size_t table) {
 
     }
 
-    void comp_club_data::generate_cl_quit (const std::string& time, const std::string& cl_name) {
-        std::cout << time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
+    void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
+        std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
     }
 
 }

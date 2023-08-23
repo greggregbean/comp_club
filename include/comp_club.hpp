@@ -8,8 +8,14 @@
 
 namespace comp_club {
 
+enum class spot {
+    queue,
+    room,
+    nowhere
+};
+
 struct pos {
-    char q_or_r; // determines if a client in queue or in room
+    spot    sp; // determines if a client in queue or in room
     size_t num;  // determines client's number of table or position in queue
 };
 
@@ -79,7 +85,7 @@ class comp_club_data {
     private:
         // All for monitoring and changing comp_club_data
         void end_session  (size_t table, const std::string end_time);
-        bool working      (const std::string& time);
+        bool working      (const std::string& e_time);
         pos  in_da_club   (const std::string& cl_name);
         void place_client (const std::string& start_time, const std::string& name, 
                            size_t table, const pos& prev_pos);
@@ -93,9 +99,9 @@ class comp_club_data {
         void handle_event         (std::ifstream& i_file, i_event event_id, const std::string& e_time);
 
         // All for generating o_events:
-        void generate_error         (const std::string& time, errors error_id);
-        void generate_cl_quit       (const std::string& time, const std::string& cl_name);
-        void generate_cl_take_table (const std::string& time, const std::string& cl_name, size_t table);
+        void generate_error         (const std::string& e_time, errors error_id);
+        void generate_cl_quit       (const std::string& e_time, const std::string& cl_name);
+        void generate_cl_take_table (const std::string& e_time, const std::string& cl_name, size_t table);
         
 };
 
