@@ -142,6 +142,11 @@ bool input_check (std::ifstream& i_file) {
         i_file.getline(line_buf, line_len);
     }
 
+    // --- Check if the last line is correct ---
+    if (!event_correct(line_buf, last_e_time, num_of_tables)) {
+            std::cout << line_buf << std::endl;
+            return false;
+        }
     return true;
 }
 

@@ -53,6 +53,33 @@ namespace comp_club {
         std::cout << std::endl << "-----------------------------------------------" << std::endl;
     }
 
+    void comp_club_data::end_day() {
+        std::set <std::string> quit_clients;
+
+        if (!queue.empty()) {
+            quit_clients.insert(queue.begin(), queue.end());
+            queue.clear();
+        }
+
+        for (size_t i = 1; i <= num_of_tables; ++i) {
+            if (room[i].active) {
+                quit_clients.insert(room[i].cl_name);
+                end_session(i, closing);
+            }
+        }
+
+        for (auto& cl_name : quit_clients) {
+            generate_cl_quit(closing, cl_name);
+        }
+    }
+
+    void comp_club_data::show_day_data() {
+        for (size_t i = 1; i <= num_of_tables; ++i) {
+            std::cout << i << " " << room[i].total_sum << " ";
+            print_time_from_minutes(room[i].total_time); 
+        }
+    }
+
     //------------------------------------------------
     // All for monitoring and changing comp_club_data
     //------------------------------------------------
@@ -223,8 +250,7 @@ namespace comp_club {
                 handle_cl_is_waiting(i_file, e_time);
                 break;
             case i_event::cl_quit:
-                i_file.ignore(line_len, '\n');
-                //handle_cl_quit(i_file, e_time);
+                handle_cl_quit(i_file, e_time);
                 break;
         }
     }
@@ -238,7 +264,6 @@ namespace comp_club {
 
         while (!i_file.eof()) {          
             handle_event(i_file, static_cast<i_event> (event_id), event_time);
-            dump();
             i_file >> event_time;
             i_file >> event_id;
         }
@@ -277,6 +302,16 @@ namespace comp_club {
 
     void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
         std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
+    }
+
+    //-------
+    // Other
+    //-------
+    void comp_club_data::print_time_from_minutes(size_t time_m) {
+        size_t hours   = time_m / 60;
+        size_t minutes = time_m % 60;
+
+        std::cout << hours / 10 << hours % 10 << ":" << minutes / 10 << minutes % 10 << std::endl;
     }
 
 }
