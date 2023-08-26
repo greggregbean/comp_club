@@ -262,6 +262,20 @@ namespace comp_club {
         }
     }
 
+    void comp_club_data::event_handler (std::ifstream& i_file) {
+        std::string event_time;
+        short       event_id;
+        
+        i_file >> event_time;
+        i_file >> event_id;
+
+        while (!i_file.eof()) {          
+            handle_event(i_file, static_cast<i_event> (event_id), event_time);
+            i_file >> event_time;
+            i_file >> event_id;
+        }
+    }
+
     //-----------------------------
     // All for generating o_events
     //-----------------------------
