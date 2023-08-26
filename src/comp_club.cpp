@@ -1,5 +1,12 @@
 #include "../include/comp_club.hpp"
 
+void print_time_from_minutes(size_t time_m) {
+    size_t hours   = time_m / 60;
+    size_t minutes = time_m % 60;
+
+    std::cout << hours / 10 << hours % 10 << ":" << minutes / 10 << minutes % 10 << std::endl;
+}
+
 namespace comp_club {
 
 //-------------
@@ -302,16 +309,6 @@ namespace comp_club {
 
     void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
         std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
-    }
-
-    //-------
-    // Other
-    //-------
-    void comp_club_data::print_time_from_minutes(size_t time_m) {
-        size_t hours   = time_m / 60;
-        size_t minutes = time_m % 60;
-
-        std::cout << hours / 10 << hours % 10 << ":" << minutes / 10 << minutes % 10 << std::endl;
     }
 
 }

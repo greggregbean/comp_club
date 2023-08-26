@@ -1,4 +1,5 @@
 #include "../include/comp_club.hpp"
+#include "../include/input_check.hpp"
 
 int main (int argc, char* argv []) {
     if (argc == 1) {

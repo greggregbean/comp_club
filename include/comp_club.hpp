@@ -1,10 +1,14 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <map>
 #include <vector>
 #include <set>
 
-#include "./input_check.hpp"
+extern size_t time_to_minutes  (const std::string& time);
+void   print_time_from_minutes (size_t time_m);
 
 namespace comp_club {
 
@@ -104,9 +108,6 @@ class comp_club_data {
         void generate_error         (const std::string& e_time, errors error_id);
         void generate_cl_quit       (const std::string& e_time, const std::string& cl_name);
         void generate_cl_take_table (const std::string& e_time, const std::string& cl_name, size_t table);
-        
-        // Other:
-        void print_time_from_minutes(size_t time_m);
 };
 
 }
