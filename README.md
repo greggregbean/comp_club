@@ -80,25 +80,32 @@ The output for input data from example:
 3 90 08:01 
 ```
 
-
 ## Structure
 Project contains 2 parts:
 * _comp_club_
 * _input_check_
 
 __include__ folder contains __*.h__ files of these parts, __src__ contains __*.cpp__ ones and __main.cpp__. _input_check_ is responsible for correctness data, if input data is correct, _comp_club_ starts it's work. The __test_files__ folder contains 10 examples of input data text files. 
-## Build
-You can compile this programm with g++:
+## Build 
+You can compile this programm with g++ (gcc in Linux or MinGw in Windows):
 ```
-g++ -std=c++20 -Wall -Wextra -Wpedantic ./src/comp_club.cpp ./src/input_check.cpp ./src/main.cpp -o run
+g++ -Wall -Wextra -Wpedantic ./src/comp_club.cpp ./src/input_check.cpp ./src/main.cpp -o run
 ```
-or build with CMake (target object file is called __run__):
+or build with CMake (target executable is called __run__) for Linux:
 ```
 mkdir build
 cd build
 cmake ..
-make
+cmake --build .
 ```
+for Windows:
+```
+mkdir build
+cd build
+cmake -G "MinGW Makefiles" ..
+cmake --build .
+```
+
 ## Run
 As mentioned earlier, you should transfer a file with input_data as a second command line argument, like this:
 ```
