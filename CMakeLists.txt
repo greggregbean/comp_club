@@ -5,11 +5,11 @@ project (comp_club)
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable ( run    src/main.cpp
-                        src/comp_club.cpp
-                        src/input_check.cpp
-                        include/comp_club.hpp
-                        include/input_check.hpp
+add_executable (run src/main.cpp
+                    src/comp_club.cpp
+                    src/input_check.cpp
+                    include/comp_club.hpp
+                    include/input_check.hpp
 )
 
 if (MSVC)

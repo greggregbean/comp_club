@@ -19,7 +19,7 @@ _Incoming events_:
 
 The example of input data:
 
-![input_data](./for_readme/iput_data.png)
+![input_data](./iput_data.png)
 
 ## Output data
 
@@ -36,8 +36,7 @@ _Outgoing events (generating during execution):_
 33. _Error_
 
 The output for input data from example:
-
-![output_data](./for_readme/output_data.png)
+![output_data](./output_data.png)
 
 
 ## Structure

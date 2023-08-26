@@ -1,22 +1,27 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <map>
 #include <vector>
 #include <set>
 
-#include "./input_check.hpp"
+extern size_t time_to_minutes  (const std::string& time);
+void   print_time_from_minutes (size_t time_m);
 
 namespace comp_club {
 
 enum class spot {
-    queue,
-    room,
-    nowhere
+    hall    = 'h',
+    queue   = 'q',
+    room    = 'r',
+    nowhere = '-'
 };
 
 struct pos {
-    spot    sp; // determines if a client in queue or in room
-    size_t num;  // determines client's number of table or position in queue
+    spot    sp; // determines if a client in hall, queue or room
+    size_t num; // determines client's number in spot
 };
 
 enum class i_event {
@@ -49,7 +54,6 @@ struct table {
 
     void dump ();
     size_t end_session(const std::string& end_time);
-
 };
 
 class comp_club_data {
@@ -63,9 +67,9 @@ class comp_club_data {
 
     size_t cost_per_hour;
 
-    std::map    <size_t, table> room;
+    std::vector <std::string>   hall;
     std::vector <std::string>   queue;
-
+    std::map    <size_t, table> room;
 
     public:
         comp_club_data (const size_t& i_num_of_tables, 
@@ -104,9 +108,6 @@ class comp_club_data {
         void generate_error         (const std::string& e_time, errors error_id);
         void generate_cl_quit       (const std::string& e_time, const std::string& cl_name);
         void generate_cl_take_table (const std::string& e_time, const std::string& cl_name, size_t table);
-        
-        // Other:
-        void print_time_from_minutes(size_t time_m);
 };
 
 }

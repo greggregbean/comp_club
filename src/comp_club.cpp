@@ -1,5 +1,12 @@
 #include "../include/comp_club.hpp"
 
+void print_time_from_minutes(size_t time_m) {
+    size_t hours   = time_m / 60;
+    size_t minutes = time_m % 60;
+
+    std::cout << hours / 10 << hours % 10 << ":" << minutes / 10 << minutes % 10 << std::endl;
+}
+
 namespace comp_club {
 
 //-------------
@@ -44,21 +51,13 @@ namespace comp_club {
             std::cout << "\t\"" << cl_name << "\"" << std::endl;
         }
 
-        std::cout << std::endl << "-----------------------------------------------" << std::endl;
-    }
+        std::cout << std::endl << "Hall: ";
 
-    void comp_club_data::event_handler (std::ifstream& i_file) {
-        std::string event_time;
-        short       event_id;
-        
-        i_file >> event_time;
-        i_file >> event_id;
-
-        while (!i_file.eof()) {          
-            handle_event(i_file, static_cast<i_event> (event_id), event_time);
-            i_file >> event_time;
-            i_file >> event_id;
+        for (size_t i = 0; i < hall.size(); ++i) {
+            std::cout << "\t\"" << hall[i] << "\"" << std::endl;
         }
+
+        std::cout << std::endl << "-----------------------------------------------" << std::endl;
     }
 
     void comp_club_data::end_day() {
@@ -102,6 +101,11 @@ namespace comp_club {
     }
 
     pos comp_club_data::in_da_club (const std::string& cl_name) {
+        // Looking in hall 
+        for (size_t i = 0; i < hall.size(); ++i) {
+            if (!hall[i].compare(cl_name)) return {spot::hall, i};
+        }
+
         // Looking in queue
         for (size_t i = 0; i < queue.size(); ++i) {
             if (!queue[i].compare(cl_name)) return {spot::queue, i};
@@ -121,7 +125,13 @@ namespace comp_club {
         room[table].cl_name      = name;
         room[table].start_time_m = time_to_minutes(start_time);
 
-        if (prev_pos.sp == spot::queue) {
+        if (prev_pos.sp == spot::hall) {
+            auto rm_pos = hall.begin();
+            rm_pos += prev_pos.num;
+            hall.erase(rm_pos);
+        }
+
+        else if (prev_pos.sp == spot::queue) {
             auto rm_pos = queue.begin();
             rm_pos += prev_pos.num;
             queue.erase(rm_pos);
@@ -158,7 +168,7 @@ namespace comp_club {
         }
 
         else {
-            queue.push_back(cl_name);
+            hall.push_back(cl_name);
         }
     }
 
@@ -200,9 +210,16 @@ namespace comp_club {
 
         else if (queue.size() > num_of_tables) {
             generate_cl_quit(e_time, cl_name);
-            auto rm_pos = queue.begin();
+            auto rm_pos = hall.begin();
             rm_pos += in_da_club(cl_name).num;
-            queue.erase(rm_pos);
+            hall.erase(rm_pos);
+        }
+
+        else {
+            queue.push_back(cl_name);
+            auto rm_pos = hall.begin();
+            rm_pos += in_da_club(cl_name).num;
+            hall.erase(rm_pos);
         }
     }
 
@@ -248,17 +265,6 @@ namespace comp_club {
     //-----------------------------
     // All for generating o_events
     //-----------------------------
-    void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
-        std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
-    }
-
-    void comp_club_data::generate_cl_take_table (const std::string& e_time, 
-                                                 const std::string& cl_name,
-                                                 size_t table) {
-        std::cout << e_time << " " << static_cast<short> (o_event::cl_take_table) 
-                        << " " << cl_name << " " << table << std::endl;  
-    }
-
     void comp_club_data::generate_error(const std::string& e_time, errors error_id) {
         std::cout << e_time << " " << static_cast<short> (o_event::error) << " ";
         switch (error_id) {
@@ -280,14 +286,15 @@ namespace comp_club {
         }
     }
 
-    //-------
-    // Other
-    //-------
-    void comp_club_data::print_time_from_minutes(size_t time_m) {
-        size_t hours   = time_m / 60;
-        size_t minutes = time_m % 60;
+    void comp_club_data::generate_cl_take_table (const std::string& e_time, 
+                                                 const std::string& cl_name,
+                                                 size_t table) {
+        std::cout << e_time << " " << static_cast<short> (o_event::cl_take_table) 
+                  << " " << cl_name << " " << table << std::endl;                                       
+    }
 
-        std::cout << hours / 10 << hours % 10 << ":" << minutes / 10 << minutes % 10 << std::endl;
+    void comp_club_data::generate_cl_quit (const std::string& e_time, const std::string& cl_name) {
+        std::cout << e_time << " " << static_cast<short> (o_event::cl_quit) << " " << cl_name << std::endl;
     }
 
 }

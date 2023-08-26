@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 
 size_t time_to_minutes (const std::string& time);
 
