@@ -63,6 +63,11 @@ namespace comp_club {
     void comp_club_data::end_day() {
         std::set <std::string> quit_clients;
 
+        if (!hall.empty()) {
+            quit_clients.insert(hall.begin(), hall.end());
+            hall.clear(); 
+        }
+
         if (!queue.empty()) {
             quit_clients.insert(queue.begin(), queue.end());
             queue.clear();

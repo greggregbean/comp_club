@@ -40,7 +40,7 @@ The example of input data:
 
 ## Output data
 
-If the input data is uncorrect, the program should output the first line with a mistake and shut down. Else should output the following result:
+If the input data is incorrect, the program should output the first line with a mistake and shut down. Else should output the following result:
 * The first line shows the start time.
 * The following lists all the events that occurred during the working day (incoming and outgoing), each on a separate line.
 * After the list of events, the end time is printed on a separate line.
@@ -85,7 +85,7 @@ Project contains 2 parts:
 * _comp_club_
 * _input_check_
 
-__include__ folder contains __*.h__ files of these parts, __src__ contains __*.cpp__ ones and __main.cpp__. _input_check_ is responsible for correctness data, if input data is correct, _comp_club_ starts it's work. The __test_files__ folder contains 10 examples of input data text files. 
+__include__ folder contains __*.h__ files of these parts, __src__ contains __*.cpp__ ones and __main.cpp__. _input_check_ is responsible for correctness data, if input data is correct, _comp_club_ starts it's work. The __test_files__ folder contains 5 examples of input data text files. 
 ## Build 
 You can compile this programm with g++ (gcc in Linux or MinGw in Windows):
 ```

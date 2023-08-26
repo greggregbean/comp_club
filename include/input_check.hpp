@@ -9,7 +9,7 @@ size_t time_to_minutes (const std::string& time);
 
 namespace ic {
 
-const size_t line_len = 1000;
+const size_t line_len = 10000;
 
 bool num_correct        (const std::string& num_s);
 bool time_correct       (const std::string& time);
