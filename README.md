@@ -42,10 +42,10 @@ The output for input data from example:
 
 ## Structure
 Project contains 2 parts:
-* `comp_club`
-* `input_check`
+* _comp_club_
+* _input_check_
 
-__include__ folder contains __*.h__ files of these parts, __src__ contains __*.cpp__ ones and __main.cpp__. `input_check` is responsible for correctness data, if input data is correct, `comp_club` starts it's work. The __test_files__ folder contains 10 examples of input data text files. 
+__include__ folder contains __*.h__ files of these parts, __src__ contains __*.cpp__ ones and __main.cpp__. _input_check_ is responsible for correctness data, if input data is correct, _comp_club_ starts it's work. The __test_files__ folder contains 10 examples of input data text files. 
 ## Build
 You can compile this programm with g++:
 ```
