@@ -1,0 +1,9 @@
+09:00 1 test_client
+10:00 3 test_client
+10:30 2 test_client 1
+11:00 1 new_client_1
+11:30 3 new_client_1
+12:00 1 new_client_2
+12:30 3 new_client_2
+13:00 1 new_client_3
+13:30 3 new_client_3

@@ -38,6 +38,8 @@ The example of input data:
 15:52 4 client4
 ```
 
+__MORE DETAILED DESCRIPTION ONE CAN FIND IN _task.docx_ ( it has only rus version ) !__
+
 ## Output data
 
 If the input data is incorrect, the program should output the first line with a mistake and shut down. Else should output the following result:
@@ -80,6 +82,8 @@ The output for input data from example:
 3 90 08:01 
 ```
 
+__MORE DETAILED DESCRIPTION ONE CAN FIND IN _task.docx_ ( it has only rus version ) !__
+
 ## Structure
 * include
   * contains __*.h__ files of input check and comp club
@@ -88,11 +92,12 @@ The output for input data from example:
 * input_data
   * contains 5 examples of input data text files
 * testing
-    * contains file with google unit tests
+    * contains google unit tests
 * CMakeLists.txt
-    * is responsible for building main target and enabling testing
+    * is responsible for building main target and adding testing subdirectory
 
-Input check is responsible for correctness of data, if input data is correct, comp club starts it's work. 
+Input check is responsible for correctness of data, if input data is correct, comp club starts it's work.
+
 ## Build 
 You can compile this programm with g++ (gcc in Linux or MinGw in Windows):
 ```
@@ -118,5 +123,5 @@ As mentioned earlier, you should transfer a file with input_data as a second com
 ```
 ./run ./test_files/tst_file.txt
 ```
-To run tests you should build the project with CMake as at has been shown earlier, then in `./build/testing/` directory `run_test` file will appear (execute him without any args).
+To run tests you should build the project with CMake as at has been shown earlier, then in `build/testing/` directory `run_test` file will appear (execute him without any args).
 

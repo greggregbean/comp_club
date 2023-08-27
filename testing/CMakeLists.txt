@@ -19,5 +19,3 @@ target_link_libraries(
   comp_club
   input_check
 )
-
-add_test(NAME test COMMAND run_test)

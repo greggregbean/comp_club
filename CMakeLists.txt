@@ -20,7 +20,6 @@ add_executable (
 #---------
 # Testing
 #---------
-enable_testing()
 add_subdirectory(testing)
 add_library(comp_club   src/comp_club.cpp)
 add_library(input_check src/input_check.cpp)
