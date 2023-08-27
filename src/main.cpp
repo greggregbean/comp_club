@@ -1,9 +1,6 @@
 #include "../include/comp_club.hpp"
 #include "../include/input_check.hpp"
 
-// Change:
-//    -- tests
-
 int main (int argc, char* argv []) {
     if (argc == 1) {
         std::cerr << "No input file." << std::endl;
@@ -16,7 +13,7 @@ int main (int argc, char* argv []) {
     
     // Firstly check correctness of data
     if (!ic::input_check(i_file)) {
-        return -1;
+        return 1;
     }
     i_file.seekg(0);
 
