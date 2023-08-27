@@ -24,7 +24,7 @@ bool time_correct (const std::string& time) {
     if (time[2] != ':')                  return false;
     if (time[3] >  '5' || time[3] < '0') return false;
     if (time[4] >  '9' || time[4] < '0') return false;
-    if (time_to_minutes(time) > 24 * 60) return false;
+    if (time_to_minutes(time) >= 24 * 60) return false;
 
     return true;
 }

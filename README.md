@@ -81,11 +81,18 @@ The output for input data from example:
 ```
 
 ## Structure
-Project contains 2 parts:
-* _comp_club_
-* _input_check_
+* include
+  * contains __*.h__ files of input check and comp club
+* src
+    * contains __*.cpp__ ones and __main.cpp__
+* input_data
+  * contains 5 examples of input data text files
+* testing
+    * contains file with google unit tests
+* CMakeLists.txt
+    * is responsible for building main target and enabling testing
 
-__include__ folder contains __*.h__ files of these parts, __src__ contains __*.cpp__ ones and __main.cpp__. _input_check_ is responsible for correctness data, if input data is correct, _comp_club_ starts it's work. The __test_files__ folder contains 5 examples of input data text files. 
+Input check is responsible for correctness of data, if input data is correct, comp club starts it's work. 
 ## Build 
 You can compile this programm with g++ (gcc in Linux or MinGw in Windows):
 ```
@@ -111,4 +118,5 @@ As mentioned earlier, you should transfer a file with input_data as a second com
 ```
 ./run ./test_files/tst_file.txt
 ```
+To run tests you should build the project with CMake as at has been shown earlier, then in `./build/testing/` directory `run_test` file will appear (execute him without any args).
 
