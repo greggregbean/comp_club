@@ -46,15 +46,13 @@ namespace comp_club {
         }
 
         std::cout << std::endl << "Queue: ";
-
-        for (auto& cl_name : queue) {
-            std::cout << "\t\"" << cl_name << "\"" << std::endl;
+        for (const auto& cl_name : queue) {
+            std::cout << "\"" << cl_name << "\"; ";
         }
 
         std::cout << std::endl << "Hall: ";
-
-        for (size_t i = 0; i < hall.size(); ++i) {
-            std::cout << "\t\"" << hall[i] << "\"" << std::endl;
+        for (const auto& cl_name: hall) {
+            std::cout << "\"" << cl_name << "\"; ";
         }
 
         std::cout << std::endl << "-----------------------------------------------" << std::endl;
@@ -80,7 +78,7 @@ namespace comp_club {
             }
         }
 
-        for (auto& cl_name : quit_clients) {
+        for (const auto& cl_name : quit_clients) {
             generate_cl_quit(closing, cl_name);
         }
     }
@@ -97,7 +95,7 @@ namespace comp_club {
     //------------------------------------------------
     void comp_club_data::end_session (size_t table, const std::string end_time) {
         size_t session_time_m = room[table].end_session(end_time);
-        room[table].total_sum += ((session_time_m / 60) + (session_time_m % 60 > 0)) * cost_per_hour;
+        room[table].total_sum += ((session_time_m + 59) / 60) * cost_per_hour;
     }
 
     bool comp_club_data::working (const std::string& e_time) {
@@ -187,9 +185,9 @@ namespace comp_club {
         std::cout << e_time << " " << static_cast<short>(i_event::cl_take_table)
                   << " " << cl_name << " " << table_num << std::endl;
 
-        pos prev_pos = in_da_club(cl_name);
+        pos cl_pos = in_da_club(cl_name);
 
-        if (prev_pos.sp == spot::nowhere) {
+        if (cl_pos.sp == spot::nowhere) {
             generate_error(e_time, errors::ClientUnknown);
         }
 
@@ -198,7 +196,7 @@ namespace comp_club {
         }
 
         else {
-            place_client(e_time, cl_name, table_num, prev_pos);
+            place_client(e_time, cl_name, table_num, cl_pos);
         }
     }
 
@@ -233,20 +231,32 @@ namespace comp_club {
         i_file >> cl_name;
 
         std::cout << e_time << " " << static_cast<short>(i_event::cl_quit) 
-                << " " << cl_name << std::endl;
+                  << " " << cl_name << std::endl;
 
-        pos prev_pos = in_da_club(cl_name);
+        pos cl_pos = in_da_club(cl_name);
 
-        if (prev_pos.sp == spot::nowhere) {
+        if (cl_pos.sp == spot::nowhere) {
             generate_error(e_time, errors::ClientUnknown);
         }
 
-        else if (prev_pos.sp == spot::room) {
-            end_session(prev_pos.num, e_time);
+        else if (cl_pos.sp == spot::room) {
+            end_session(cl_pos.num, e_time);
             if (!queue.empty()) {
-                generate_cl_take_table(e_time, queue[0], prev_pos.num);
-                place_client(e_time, queue[0], prev_pos.num, {spot::queue, 0});
+                generate_cl_take_table(e_time, queue[0], cl_pos.num);
+                place_client(e_time, queue[0], cl_pos.num, {spot::queue, 0});
             }
+        }
+
+        else if (cl_pos.sp == spot::queue) {
+            auto rm_pos = queue.begin();
+            rm_pos += cl_pos.num;
+            queue.erase(rm_pos);
+        }
+
+        else {
+            auto rm_pos = hall.begin();
+            rm_pos += cl_pos.num;
+            hall.erase(rm_pos);
         }
     }
 

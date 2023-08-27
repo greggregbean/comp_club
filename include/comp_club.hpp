@@ -20,7 +20,7 @@ enum class spot {
 };
 
 struct pos {
-    spot    sp; // determines if a client in hall, queue or room
+    spot    sp; // determines if a client in hall, queue, room or nowhere
     size_t num; // determines client's number in spot
 };
 
@@ -48,8 +48,8 @@ enum class errors {
 struct table {
     bool active = false;
     std::string cl_name;
-    std::size_t start_time_m; 
-    size_t total_time = 0;
+    std::size_t start_time_m; // start time as minutes
+    size_t total_time = 0;    // total_time as minutes
     size_t total_sum  = 0;
 
     void dump ();
@@ -59,17 +59,17 @@ struct table {
 class comp_club_data {
     size_t num_of_tables;
 
-    std::string  opening;
-    size_t opening_m = 0;
+    std::string  opening; // opening time as a string
+    size_t opening_m = 0; // opening time as minutes
 
-    std::string  closing;
-    size_t closing_m = 0;
+    std::string  closing; // closing time as a string
+    size_t closing_m = 0; // closing time as minutes
 
     size_t cost_per_hour;
 
-    std::vector <std::string>   hall;
-    std::vector <std::string>   queue;
-    std::map    <size_t, table> room;
+    std::vector <std::string>      hall;
+    std::vector <std::string>      queue;
+    std::map    <size_t, table>    room;
 
     public:
         comp_club_data (const size_t& i_num_of_tables, 

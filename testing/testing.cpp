@@ -2,7 +2,7 @@
 #include "../include/comp_club.hpp"
 #include "../include/input_check.hpp"
 
-TEST(inpuit_check, time_correct) {
+TEST(input_check, time_correct) {
     // Arange
     std::string corr_time_1   {"09:00"};
     std::string corr_time_2   {"00:00"};
@@ -11,6 +11,8 @@ TEST(inpuit_check, time_correct) {
     std::string incorr_time_5 {"5:00"};
     std::string incorr_time_6 {"-1:25"};
     std::string incorr_time_7 {"22:83"};
+    std::string incorr_time_8 {""};
+    std::string incorr_time_9 {" "};
 
     // Act
     bool res_1 = ic::time_correct(corr_time_1);
@@ -20,6 +22,8 @@ TEST(inpuit_check, time_correct) {
     bool res_5 = ic::time_correct(incorr_time_5);
     bool res_6 = ic::time_correct(incorr_time_6);
     bool res_7 = ic::time_correct(incorr_time_7);
+    bool res_8 = ic::time_correct(incorr_time_8);
+    bool res_9 = ic::time_correct(incorr_time_9);
     
     // Assert
     ASSERT_EQ(res_1,  true);
@@ -29,4 +33,7 @@ TEST(inpuit_check, time_correct) {
     ASSERT_EQ(res_5,  false);
     ASSERT_EQ(res_6,  false);
     ASSERT_EQ(res_7,  false);
+    ASSERT_EQ(res_8,  false);
+    ASSERT_EQ(res_9,  false);
 }
+
