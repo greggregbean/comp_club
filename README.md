@@ -119,7 +119,7 @@ cmake --build .
 ```
 
 ## Run
-As mentioned earlier, you should transfer a file with input_data as a second command line argument, like this:
+As mentioned earlier, you should transfer a file with input data as a second command line argument, like this:
 ```
 ./run ./test_files/tst_file.txt
 ```
