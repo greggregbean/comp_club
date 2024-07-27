@@ -1,4 +1,4 @@
-#include "../include/input_check.hpp"
+#include "input_check.hpp"
 
 size_t time_to_minutes (const std::string& time) {
     size_t minutes = 0;

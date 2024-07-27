@@ -1,4 +1,4 @@
-#include "../include/comp_club.hpp"
+#include "comp_club.hpp"
 
 void print_time_from_minutes(size_t time_m) {
     size_t hours   = time_m / 60;

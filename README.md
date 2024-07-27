@@ -98,6 +98,9 @@ __MORE DETAILED DESCRIPTION ONE CAN FIND IN _task.docx_ ( it has only rus versio
 
 Input check is responsible for correctness of data, if input data is correct, comp club starts it's work.
 
+## Clonnig the project
+Use `git clone --recursive` to download the project and its gtest git submodule. Otherwise from the project root repository you need to download the submodule with `git submodule update --init`.
+
 ## Build 
 You can compile this programm with g++ (gcc in Linux or MinGw in Windows):
 ```
@@ -123,5 +126,5 @@ As mentioned earlier, you should transfer a file with input data as a second com
 ```
 ./run ./test_files/tst_file.txt
 ```
-To run tests you should build the project with CMake as at has been shown earlier, then in `build/testing/` directory `run_test` file will appear (execute him without any args).
+To run tests you should build the project with CMake as at has been shown earlier, then in `build` directory `run_unit_tests` file will appear (execute him without any args).
 

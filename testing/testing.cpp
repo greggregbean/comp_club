@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../include/comp_club.hpp"
-#include "../include/input_check.hpp"
+#include "comp_club.hpp"
+#include "input_check.hpp"
 
 //-------------
 // Imput check
